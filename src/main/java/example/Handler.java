@@ -126,7 +126,7 @@ public class Handler implements RequestHandler<String, Integer> {
         }
 
         if(!response.body().startsWith("good")){
-            throw new RuntimeException("Could not update DNS");
+            throw new RuntimeException("Could not update DNS. Got response: " + response.body());
         }
     }
 }
