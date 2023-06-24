@@ -24,8 +24,8 @@ public class Handler implements RequestHandler<String, Integer> {
     public Integer handleRequest(String event, Context context){
         LambdaLogger logger = context.getLogger();
         logger.log("----EVENT: " + event+"----");
-        String appServerInstanceId = System.getProperty("APP_SERVER_INSTANCE_ID");
-        String dbInstanceIdentifier = System.getProperty("DB_INSTANCE_IDENTIFIER");
+        String appServerInstanceId = System.getenv("APP_SERVER_INSTANCE_ID");
+        String dbInstanceIdentifier = System.getenv("DB_INSTANCE_IDENTIFIER");
         DescribeInstancesRequest describeInstancesRequest = DescribeInstancesRequest.builder().instanceIds(appServerInstanceId).build();
         DescribeDbInstancesRequest describeDbInstancesRequest = DescribeDbInstancesRequest.builder().dbInstanceIdentifier(dbInstanceIdentifier).build();
 
@@ -105,14 +105,14 @@ public class Handler implements RequestHandler<String, Integer> {
 
     public static void updateDNS(String ip){
 
-        String url = System.getProperty("DNS_UPDATE_URL");
+        String url = System.getenv("DNS_UPDATE_URL");
         URI uri = URI.create(url + ip);
 
         HttpClient client = HttpClient.newBuilder()
                 .authenticator(new Authenticator() {
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(System.getProperty("DNS_SERVICE_USERNAME"), System.getProperty("DNS_SERVICE_PASSWORD").toCharArray());
+                        return new PasswordAuthentication(System.getenv("DNS_SERVICE_USERNAME"), System.getenv("DNS_SERVICE_PASSWORD").toCharArray());
                     }
                 }).build();
 
